@@ -15,7 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,10 +63,17 @@ public class MainActivityFragment extends Fragment {
         int layout = R.layout.movie_list;
         int id = R.id.movie_list_textview;
 
+
+
         adapter = new ArrayAdapter<>(activity, layout, id, new ArrayList<String>());
 
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_movies);
-        listView.setAdapter(adapter);
+//        http://image.tmdb.org/t/p/original/5N20rQURev5CNDcMjHVUZhpoCNC.jpg?api_key=9426e5f190c68f947f6d8768a8cc04e8
+
+        GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
+//        ImageView imageView = (ImageView) gridview.findViewById(R.id.imageView);
+        gridview.setAdapter(adapter);
+//        Picasso.with(getContext()).load("YOUR IMAGE URL HERE").into(imageView);
+
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -110,18 +121,17 @@ public class MainActivityFragment extends Fragment {
 
             String forecastData = getDataFromServer();
 
-            MovieData[] weatherData = null;
+            MovieData[] movieDataArr = null;
             try {
-                weatherData = DataParser.getDataFromJson(forecastData);
+                movieDataArr = DataParser.getDataFromJson(forecastData);
             } catch (Exception e) {
                 e.printStackTrace();
 
-                String errMsg = "No data from server";
                 ArrayList list = new ArrayList<>(Collections.nCopies(DAYS_NUM, new MovieData()));
-                weatherData = (MovieData[]) list.toArray(new MovieData[list.size()]);
+                movieDataArr = (MovieData[]) list.toArray(new MovieData[list.size()]);
             }
 
-            return weatherData;
+            return movieDataArr;
         }
 
 
@@ -143,7 +153,7 @@ public class MainActivityFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
 
-            String vodType = getFromPref(R.string.pref_vod_type, R.string.pref_default_vod_type);
+            String vodType = getFromPref(R.string.settings_vod_type_label, R.string.pref_default_vod_type);
             String queryType = getFromPref(R.string.pref_search_type, R.string.pref_default_search_type);
 
             try {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <ListPreference
+        android:title="@string/settings_vod_type_label"
+        android:key="@string/settings_vod_type_key"
+        android:defaultValue="@string/pref_default_vod_type"
+        android:entryValues="@array/pref_vod_values"
+        android:entries="@array/pref_vod_options"/>
+
+</PreferenceScreen>

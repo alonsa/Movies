@@ -1,11 +1,25 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
 
     <string name="movie_db_api_key" translatable="false">9426e5f190c68f947f6d8768a8cc04e8</string>
-    <string name="pref_vod_type" translatable="false">vod_type</string>
     <string name="pref_default_vod_type" translatable="false">movie</string>
     <string name="pref_search_type" translatable="false">search_type</string>
     <string name="pref_default_search_type" translatable="false">popular</string>
+
+    <string name="pref_vod_type_movie" translatable="false">movie</string>
+    <string name="pref_vod_type_tv_show" translatable="false">tvshow</string>
+
+    <string name="settings_vod_type_label">Vod type</string>
+    <string name="settings_vod_type_key">Select vod type</string>
+
+    <string name="settings_query_type_label">Query type</string>
+    <string name="settings_query_type_key">Select query type</string>
+
+    <string name="image_poster_size_small" translatable="false">w92</string>
+    <string name="image_poster_size_medium" translatable="false">w500</string>
+    <string name="image_poster_size_large" translatable="false">original</string>
 
 </resources>
