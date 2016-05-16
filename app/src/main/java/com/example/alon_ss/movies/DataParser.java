@@ -1,9 +1,13 @@
 package com.example.alon_ss.movies;
 
+import android.content.Context;
+import android.net.Uri;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
 import java.text.ParseException;
 
 /**
@@ -11,7 +15,7 @@ import java.text.ParseException;
  */
 public class DataParser {
 
-    public static MovieData[] getDataFromJson(String jsonStr) throws JSONException {
+    public static MovieData[] getDataFromJson(String jsonStr, Context context) throws JSONException, MalformedURLException {
 
         JSONObject json = new JSONObject(jsonStr);
         JSONArray results = json.getJSONArray("results");
@@ -23,7 +27,7 @@ public class DataParser {
             JSONObject movieData = results.getJSONObject(i);
 
             try {
-                resultStr[i] = new MovieData(movieData);
+                resultStr[i] = new MovieData(movieData, context);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

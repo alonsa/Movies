@@ -1,8 +1,13 @@
 package com.example.alon_ss.movies;
 
+import android.content.Context;
+import android.net.Uri;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,71 +17,61 @@ import java.util.Date;
  */
 public class MovieData {
 
-    final String POSTER_PATH = "poster_path";
-    final String OVERVIEW = "overview";
-    final String RELEASE_DATE = "release_date";
-    final String ID = "id";
-    final String ORIGINAL_TITLE = "title";
-    final String VOTE_AVERAGE = "vote_average";
+    private URL posterUrl;
+    private String overview = "";
+    private Date releaseDate;
+    private String id = "";
+    private String title = "";
+    private double voteAverage = 0;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
-
-    String poster_path = "";
-    String overview = "";
-    Date release_date;
-    String id = "";
-    String title = "";
-    double vote_average = 0;
-
-    public MovieData() {
-        overview = "Temp data overview";
-        release_date = new Date();
-        title = "Temp title";
-    }
-
-    public MovieData(JSONObject movieDataJson) throws JSONException, ParseException {
-
-
-        poster_path = movieDataJson.getString(POSTER_PATH);
-        overview = movieDataJson.getString(OVERVIEW);
+    public MovieData(JSONObject movieDataJson, Context context) throws JSONException, ParseException, MalformedURLException {
+        posterUrl = getPosterUrl(movieDataJson, context);
+        String OVERVIEW = "overview";
+        String RELEASE_DATE = "release_date";
+        String ID = "id";
         String dateInString = movieDataJson.getString(RELEASE_DATE);
-        release_date = formatter.parse(dateInString);
+        String ORIGINAL_TITLE = "original_title";
+        String VOTE_AVERAGE = "vote_average";
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+
+        overview = movieDataJson.getString(OVERVIEW);
+        releaseDate = formatter.parse(dateInString);
         id = movieDataJson.getString(ID);
         title = movieDataJson.getString(ORIGINAL_TITLE);
-        vote_average = movieDataJson.getDouble(VOTE_AVERAGE);
+        voteAverage = movieDataJson.getDouble(VOTE_AVERAGE);
     }
 
-    public double getVote_average() {
-        return vote_average;
+    private URL getPosterUrl(JSONObject movieDataJson, Context context) throws JSONException, MalformedURLException {
+        String size = context.getString(R.string.image_poster_size_small);
+
+        String POSTER_PATH = "poster_path";
+        String posterRawPath = movieDataJson.getString(POSTER_PATH).replace("/", "");
+        String p = "p";
+        String t = "t";
+        String APP_ID = "api_key";
+        String IMAGE_BASE_URL = "http://image.tmdb.org";
+        Uri.Builder builtUri = Uri.parse(IMAGE_BASE_URL).buildUpon().appendPath(t).appendPath(p).appendPath(size)
+                .appendPath(posterRawPath)
+                .appendQueryParameter(APP_ID, context.getString(R.string.movie_db_api_key));
+
+        return new URL(builtUri.toString());
     }
 
-    public void setVote_average(double vote_average) {
-        this.vote_average = vote_average;
+    public double getVoteAverage() {
+        return voteAverage;
     }
 
-    public String getPoster_path() {
-        return poster_path;
-    }
-
-    public void setPoster_path(String poster_path) {
-        this.poster_path = poster_path;
+    public URL getPosterUrl() {
+        return posterUrl;
     }
 
     public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public Date getRelease_date() {
-        return release_date;
-    }
-
-    public void setRelease_date(Date release_date) {
-        this.release_date = release_date;
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
     public String getId() {
@@ -89,10 +84,6 @@ public class MovieData {
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
 }

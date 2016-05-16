@@ -10,4 +10,11 @@
         android:entryValues="@array/pref_vod_values"
         android:entries="@array/pref_vod_options"/>
 
+    <ListPreference
+        android:title="@string/settings_search_type_label"
+        android:key="@string/settings_search_type_key"
+        android:defaultValue="@string/pref_default_search_type"
+        android:entryValues="@array/pref_search_values"
+        android:entries="@array/pref_search_options"/>
+
 </PreferenceScreen>

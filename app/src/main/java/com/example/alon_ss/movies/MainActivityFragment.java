@@ -1,6 +1,5 @@
 package com.example.alon_ss.movies;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -8,35 +7,31 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-
-import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
 
-    private ArrayAdapter<String> adapter;
+    private ImageAdapter imageAdapter = new ImageAdapter();
 
 
     public MainActivityFragment() {
@@ -48,31 +43,12 @@ public class MainActivityFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        return inflater.inflate(R.layout.fragment_main, container, false);
-//    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        FragmentActivity activity = getActivity();
-        int layout = R.layout.movie_list;
-        int id = R.id.movie_list_textview;
-
-
-
-        adapter = new ArrayAdapter<>(activity, layout, id, new ArrayList<String>());
-
-//        http://image.tmdb.org/t/p/original/5N20rQURev5CNDcMjHVUZhpoCNC.jpg?api_key=9426e5f190c68f947f6d8768a8cc04e8
-
+        imageAdapter.setContext(getContext());
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
-//        ImageView imageView = (ImageView) gridview.findViewById(R.id.imageView);
-        gridview.setAdapter(adapter);
-//        Picasso.with(getContext()).load("YOUR IMAGE URL HERE").into(imageView);
+        gridview.setAdapter(imageAdapter);
 
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -85,10 +61,6 @@ public class MainActivityFragment extends Fragment {
 //        });
 
 
-
-
-
-
         return rootView;
     }
 
@@ -98,14 +70,22 @@ public class MainActivityFragment extends Fragment {
         updateData();
     }
 
-    private void updateData() {
-        String[] tempDataList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"};
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
 
+        switch(itemId){
+            case R.id.action_refresh :
+                updateData();
+                return true;
+
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void updateData() {
         FetchDataTask fetchWeatherTask = new FetchDataTask();
         fetchWeatherTask.execute();
-
-
-        adapter.addAll(tempDataList);
     }
 
     private class FetchDataTask extends AsyncTask<String, Void, MovieData[]> {
@@ -113,7 +93,6 @@ public class MainActivityFragment extends Fragment {
         private final String LOG_TAG = this.getClass().getSimpleName();
 
         final String BASE_URL = "http://api.themoviedb.org/3/";
-        final Integer DAYS_NUM = 7;
         final String APP_ID = "api_key";
 
         @Override
@@ -123,12 +102,13 @@ public class MainActivityFragment extends Fragment {
 
             MovieData[] movieDataArr = null;
             try {
-                movieDataArr = DataParser.getDataFromJson(forecastData);
+                if (forecastData != null){
+                    movieDataArr = DataParser.getDataFromJson(forecastData, getContext());
+                }else{
+                    Log.e(LOG_TAG, "Cant get data from server!!!");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-
-                ArrayList list = new ArrayList<>(Collections.nCopies(DAYS_NUM, new MovieData()));
-                movieDataArr = (MovieData[]) list.toArray(new MovieData[list.size()]);
             }
 
             return movieDataArr;
@@ -153,8 +133,10 @@ public class MainActivityFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
 
-            String vodType = getFromPref(R.string.settings_vod_type_label, R.string.pref_default_vod_type);
-            String queryType = getFromPref(R.string.pref_search_type, R.string.pref_default_search_type);
+            String vodType = getFromPref(R.string.settings_vod_type_key, R.string.pref_default_vod_type);
+            String confQueryType = getFromPref(R.string.settings_search_type_key, R.string.pref_default_search_type);
+
+            String queryType = getQueryTypeByVodAndConfQueryType(vodType ,confQueryType);
 
             try {
                 Uri builtUri = Uri.parse(BASE_URL)
@@ -163,6 +145,9 @@ public class MainActivityFragment extends Fragment {
                         .appendPath(queryType)
                         .appendQueryParameter(APP_ID, getString(R.string.movie_db_api_key))
                         .build();
+
+                Log.d(LOG_TAG, "Uri to server : " + builtUri.toString());
+
 
                 URL url = new URL(builtUri.toString());
                 // Create the request to OpenWeatherMap, and open the connection
@@ -189,13 +174,10 @@ public class MainActivityFragment extends Fragment {
                 }
                 forecastJsonStr = buffer.toString();
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.e(LOG_TAG, "Error ", e);
                 return null;
-            }  catch (Exception e) {
-                Log.e(LOG_TAG, "Error ", e);
-                return null;
-            }finally {
+            } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
@@ -212,13 +194,43 @@ public class MainActivityFragment extends Fragment {
         }
 
         protected void onPostExecute(MovieData[] result) {
-
             if (result != null){
-                adapter.clear();
-                for (MovieData movie: result){
-                    adapter.add(movie.getTitle());
-                }
+                imageAdapter.clear();
+                ArrayList<MovieData> all = new ArrayList<MovieData>(Arrays.asList(result));
+                imageAdapter.addAll(all);
             }
         }
+    }
+
+    private Boolean isMovie(String vodType) {
+        return getString(R.string.pref_vod_type_movie).equals(vodType);
+    }
+
+    private String getQueryTypeByVodAndConfQueryType(String vodType, String queryType) {
+
+        Set<String> vodQueryTypes = new HashSet<>(Arrays.asList(
+                getString(R.string.pref_search_query_latest),
+                getString(R.string.pref_search_query_popular),
+                getString(R.string.pref_search_query_top_rated),
+                getString(R.string.pref_search_vod_query_upcoming_value),
+                getString(R.string.pref_search_vod_query_now_playing_value)));
+
+
+        Set<String> tvQueryTypes = new HashSet<>(Arrays.asList(
+                getString(R.string.pref_search_query_latest),
+                getString(R.string.pref_search_query_popular),
+                getString(R.string.pref_search_query_top_rated),
+                getString(R.string.pref_search_tv_query_airing_today_value),
+                getString(R.string.pref_search_tv_query_on_the_air_value)));
+
+        if (!((isMovie(vodType) && vodQueryTypes.contains(queryType)) ||
+                (!isMovie(vodType) && tvQueryTypes.contains(queryType)))){
+
+            return getString(R.string.pref_search_query_popular);
+        }else {
+            return queryType;
+        }
+
+
     }
 }
