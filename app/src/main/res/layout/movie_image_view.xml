@@ -1,24 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="6dip"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
     android:id="@+id/movie_relative_layout" >
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
         android:id="@+id/movie_image_view"
-        android:adjustViewBounds="true"
-        >
+        android:contentDescription="@string/image_poster_size_small">
     </ImageView>
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:minHeight="?android:attr/listPreferredItemHeight"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:id="@+id/movie_list_textviewInRelative">-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/movie_text_view"
+        android:layout_gravity="center_vertical"
+        >
 
-    <!--</TextView>-->
+    </TextView>
 
-</RelativeLayout>
+
+</LinearLayout>

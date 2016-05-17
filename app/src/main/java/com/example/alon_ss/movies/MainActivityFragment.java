@@ -1,5 +1,6 @@
 package com.example.alon_ss.movies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.io.BufferedReader;
@@ -50,15 +52,15 @@ public class MainActivityFragment extends Fragment {
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(imageAdapter);
 
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                String forecast = adapter.getItem(position);
-//                Intent intent = new Intent(getActivity(), DetailActivity.class)
-//                        .putExtra(Intent.EXTRA_TEXT, forecast);
-//                startActivity(intent);
-//            }
-//        });
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                MovieData movieData = imageAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                intent.putExtra(Intent.EXTRA_TEXT, movieData);
+                startActivity(intent);
+            }
+        });
 
 
         return rootView;
@@ -98,12 +100,12 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected MovieData[] doInBackground(String... strings) {
 
-            String forecastData = getDataFromServer();
+            String data = getDataFromServer();
 
             MovieData[] movieDataArr = null;
             try {
-                if (forecastData != null){
-                    movieDataArr = DataParser.getDataFromJson(forecastData, getContext());
+                if (data != null){
+                    movieDataArr = DataParser.getDataFromJson(data, getContext());
                 }else{
                     Log.e(LOG_TAG, "Cant get data from server!!!");
                 }
@@ -131,7 +133,7 @@ public class MainActivityFragment extends Fragment {
             BufferedReader reader = null;
 
             // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
+            String jsonStr = null;
 
             String vodType = getFromPref(R.string.settings_vod_type_key, R.string.pref_default_vod_type);
             String confQueryType = getFromPref(R.string.settings_search_type_key, R.string.pref_default_search_type);
@@ -172,7 +174,7 @@ public class MainActivityFragment extends Fragment {
                 if (buffer.length() == 0) {
                     return null;
                 }
-                forecastJsonStr = buffer.toString();
+                jsonStr = buffer.toString();
 
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Error ", e);
@@ -190,7 +192,7 @@ public class MainActivityFragment extends Fragment {
                 }
             }
 
-            return forecastJsonStr;
+            return jsonStr;
         }
 
         protected void onPostExecute(MovieData[] result) {
@@ -230,7 +232,5 @@ public class MainActivityFragment extends Fragment {
         }else {
             return queryType;
         }
-
-
     }
 }

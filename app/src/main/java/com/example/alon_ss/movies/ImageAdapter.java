@@ -1,17 +1,16 @@
 package com.example.alon_ss.movies;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by alon_ss on 5/9/16.
@@ -35,7 +34,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public MovieData getItem(int i) {
         return data.get(i);
     }
 
@@ -49,19 +48,17 @@ public class ImageAdapter extends BaseAdapter {
 
 //        Log.d(LOG_TAG, "getView [position: " + position + ", convertView: " + convertView + "]");
 
-        View view = convertView;
+        View view = inflater.inflate(R.layout.movie_image_view, viewGroup, false);
+        MovieData movieData = getItem(position);
 
-//        if (needToUpdate[position] || view == null) {
-            view = inflater.inflate(R.layout.movie_image_view, viewGroup, false);
-            MovieData movieData = (MovieData) getItem(position);
+        if (movieData != null){
+            ImageView imageView = (ImageView) view.findViewById(R.id.movie_image_view);
+            String path = movieData.getPosterUrl(R.string.image_poster_size_small).toString();
+            Picasso.with(context).load(path).fit().centerInside().into(imageView);
+            TextView textView = (TextView) view.findViewById(R.id.movie_text_view);
+            textView.setText(movieData.getTitle());
+        }
 
-            if (movieData.getPosterUrl() != null){
-                ImageView imageView = (ImageView) view.findViewById(R.id.movie_image_view);
-                String path = movieData.getPosterUrl().toString();
-                Picasso.with(context).load(path).fit().centerInside().into(imageView);
-            }
-
-//        }
 
         return view;
     }

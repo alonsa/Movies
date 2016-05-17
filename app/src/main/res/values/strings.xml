@@ -2,6 +2,7 @@
     <string name="app_name">Movies</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_detail">Details</string>
 
     <string name="action_refresh" translatable="false">Refresh</string>
 
@@ -17,12 +18,12 @@
     <string name="pref_search_query_top_rated" translatable="false">top_rated</string>
     <string name="pref_search_vod_query_now_playing_value" translatable="false">now_playing</string>
     <string name="pref_search_vod_query_upcoming_value" translatable="false">upcoming</string>
-    <string name="pref_search_vod_query_now_playing_display" translatable="false">now_playing (VOD only)</string>
-    <string name="pref_search_vod_query_upcoming_display" translatable="false">upcoming (VOD only)</string>
-    <string name="pref_search_tv_query_airing_today_value" translatable="false">now_playing</string>
-    <string name="pref_search_tv_query_airing_today_display" translatable="false">upcoming</string>
-    <string name="pref_search_tv_query_on_the_air_value" translatable="false">now_playing (TV only)</string>
-    <string name="pref_search_tv_query_on_the_air_display" translatable="false">upcoming (TV only)</string>
+    <string name="pref_search_vod_query_now_playing_display" translatable="false">Now playing (VOD only)</string>
+    <string name="pref_search_vod_query_upcoming_display" translatable="false">Upcoming (VOD only)</string>
+    <string name="pref_search_tv_query_airing_today_value" translatable="false">airing_today</string>
+    <string name="pref_search_tv_query_airing_today_display" translatable="false">Airing today (TV only)</string>
+    <string name="pref_search_tv_query_on_the_air_value" translatable="false">on_the_air</string>
+    <string name="pref_search_tv_query_on_the_air_display" translatable="false">On the air (TV only)</string>
 
     <string name="settings_vod_type_label">Vod type</string>
     <string name="settings_vod_type_key">Select vod type</string>
@@ -33,5 +34,11 @@
     <string name="image_poster_size_small" translatable="false">w92</string>
     <string name="image_poster_size_medium" translatable="false">w500</string>
     <string name="image_poster_size_large" translatable="false">original</string>
+
+    <!--Detail titles-->
+    <string name="detail_title_original_title">Original title</string>
+    <string name="detail_title_plot">Plot</string>
+    <string name="detail_title_rating">IMDB rating</string>
+    <string name="detail_title_release_date">Release date</string>
 
 </resources>
