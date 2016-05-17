@@ -15,7 +15,7 @@ import java.text.ParseException;
  */
 public class DataParser {
 
-    public static MovieData[] getDataFromJson(String jsonStr, Context context) throws JSONException, MalformedURLException {
+    public static MovieData[] getDataFromJson(String jsonStr) throws JSONException, MalformedURLException {
 
         JSONObject json = new JSONObject(jsonStr);
         JSONArray results = json.getJSONArray("results");
@@ -27,7 +27,7 @@ public class DataParser {
             JSONObject movieData = results.getJSONObject(i);
 
             try {
-                resultStr[i] = new MovieData(movieData, context);
+                resultStr[i] = new MovieData(movieData);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

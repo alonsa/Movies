@@ -52,8 +52,9 @@ public class ImageAdapter extends BaseAdapter {
         MovieData movieData = getItem(position);
 
         if (movieData != null){
+
             ImageView imageView = (ImageView) view.findViewById(R.id.movie_image_view);
-            String path = movieData.getPosterUrl(R.string.image_poster_size_small).toString();
+            String path = movieData.getPosterUrl(R.string.image_poster_size_small, context).toString();
             Picasso.with(context).load(path).fit().centerInside().into(imageView);
             TextView textView = (TextView) view.findViewById(R.id.movie_text_view);
             textView.setText(movieData.getTitle());

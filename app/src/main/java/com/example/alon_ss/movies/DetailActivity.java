@@ -27,7 +27,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -38,6 +41,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
+
             getSupportFragmentManager().beginTransaction().add(R.id.container, new DetailFragment()).commit();
         }
     }
@@ -65,21 +69,6 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onPostResume() {
-//
-//        getac
-//
-//        String vodType = getFromPref(R.string.settings_vod_type_key, R.string.pref_default_vod_type);
-//        String confQueryType = getFromPref(R.string.settings_search_type_key, R.string.pref_default_search_type);
-//        String checkedConfQueryType = getQueryTypeByVodAndConfQueryType(vodType, confQueryType);
-//        String titleVodType = vodType.substring(0,1).toUpperCase() + vodType.substring(1);
-//        String titleConfQueryType = checkedConfQueryType.substring(0,1).toUpperCase() + checkedConfQueryType.substring(1);
-//        setTitle(titleVodType + " - " + titleConfQueryType);
-//
-//        super.onPostResume();
-//    }
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -94,34 +83,41 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            View view = inflater.inflate(R.layout.fragment_detail, container, false);
+            View mainView = inflater.inflate(R.layout.fragment_detail, container, false);
 
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 MovieData movieData = intent.getParcelableExtra(Intent.EXTRA_TEXT);
-                TextView originalTitleTextView = (TextView) view.findViewById(R.id.detail_original_title);
+
+                TextView originalTitleTextView = (TextView) mainView.findViewById(R.id.detail_original_title);
                 CharSequence originalTitle = getHtml(getText(R.string.detail_title_original_title), movieData.getTitle());
-                originalTitleTextView.setText(originalTitle);
+                originalTitleTextView.setText(movieData.getTitle());
 
 
-                TextView plotTitleTextView = (TextView) view.findViewById(R.id.detail_plot_synopsis);
+                TextView plotTitleTextView = (TextView) mainView.findViewById(R.id.detail_plot_synopsis);
                 CharSequence plot = getHtml(getText(R.string.detail_title_plot), movieData.getOverview());
                 plotTitleTextView.setText(plot);
 
-                TextView ratingTitleTextView = (TextView) view.findViewById(R.id.detail_rating);
+                TextView ratingTitleTextView = (TextView) mainView.findViewById(R.id.detail_rating);
                 CharSequence rating = getHtml(getText(R.string.detail_title_rating), String.valueOf(movieData.getVoteAverage()));
                 ratingTitleTextView.setText(rating);
 
-                TextView releaseDateTitleTextView = (TextView) view.findViewById(R.id.detail_release_date);
+                TextView releaseDateTitleTextView = (TextView) mainView.findViewById(R.id.detail_release_date);
                 CharSequence releaseDate = getHtml(getText(R.string.detail_title_release_date), movieData.getReleaseDateString());
                 releaseDateTitleTextView.setText(releaseDate);
+
+                ImageView detailImageView = (ImageView) mainView.findViewById(R.id.detail_image_view);
+                detailImageView.setImageAlpha(40); //value: [0-255]. Where 0 is fully transparent and 255 is fully opaque.
+
+                String path = movieData.getPosterUrl(R.string.image_poster_size_large, getContext()).toString();
+                Picasso.with(getContext()).load(path).fit().centerInside().into(detailImageView);
             }
 
-            return view;
+            return mainView;
         }
 
         private Spanned getHtml(CharSequence title, String body) {
-            return Html.fromHtml("<b>" + title + ": " + "</b>" + "<br />" +  body);
+            return Html.fromHtml("<b>" + "<u>"+ title + ": " + "</b>" + "</u>" + "<br />" + "<b>" + body + "<br />");
         }
 
 //        @Override

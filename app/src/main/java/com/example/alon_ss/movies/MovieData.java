@@ -20,7 +20,6 @@ import java.util.Date;
 public class MovieData implements Parcelable {
 
     private String posterRawPath;
-    private Context context;
     private String overview = "";
     private Date releaseDate;
     private String id = "";
@@ -29,7 +28,7 @@ public class MovieData implements Parcelable {
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    public MovieData(JSONObject movieDataJson, Context context) throws JSONException, ParseException, MalformedURLException {
+    public MovieData(JSONObject movieDataJson) throws JSONException, ParseException, MalformedURLException {
         String POSTER_PATH = "poster_path";
 
         String OVERVIEW = "overview";
@@ -39,7 +38,6 @@ public class MovieData implements Parcelable {
         String ORIGINAL_TITLE = "original_title";
         String VOTE_AVERAGE = "vote_average";
 
-        this.context = context;
         this.posterRawPath = movieDataJson.getString(POSTER_PATH).replace("/", "");
         this.overview = movieDataJson.getString(OVERVIEW);
         this.releaseDate = formatter.parse(dateInString);
@@ -100,7 +98,7 @@ public class MovieData implements Parcelable {
         return voteAverage;
     }
 
-    public URL getPosterUrl(int sizeInt) {
+    public URL getPosterUrl(int sizeInt, Context context) {
         String size = context.getString(sizeInt);
 
         String p = "p";

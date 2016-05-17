@@ -5,7 +5,7 @@
     android:id="@+id/movie_relative_layout" >
 
     <ImageView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="230dp"
         android:id="@+id/movie_image_view"
         android:contentDescription="@string/image_poster_size_small">
@@ -17,7 +17,6 @@
         android:id="@+id/movie_text_view"
         android:layout_gravity="center_vertical"
         >
-
     </TextView>
 
 
