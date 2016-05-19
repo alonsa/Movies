@@ -1,4 +1,4 @@
-package com.example.alon_ss.movies;
+package com.example.alon_ss.movies.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.alon_ss.movies.R;
+import com.example.alon_ss.movies.settings.SettingsActivity;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
         if (savedInstanceState == null) {
             int id = R.id.container;

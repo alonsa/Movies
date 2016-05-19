@@ -1,14 +1,12 @@
-package com.example.alon_ss.movies;
+package com.example.alon_ss.movies.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,24 +14,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.example.alon_ss.movies.utills.MovieDbClient;
+import com.example.alon_ss.movies.R;
+import com.example.alon_ss.movies.entities.VodData;
+import com.example.alon_ss.movies.details.DetailActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
 
-    private ImageAdapter imageAdapter = new ImageAdapter();
-
+    private MainImageAdapter mainImageAdapter = new MainImageAdapter();
 
     public MainActivityFragment() {
     }
@@ -42,21 +36,21 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        updateData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        imageAdapter.setContext(getContext());
+        View rootView = inflater.inflate(R.layout.main_fragment, container, false);
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
-        gridview.setAdapter(imageAdapter);
+        gridview.setAdapter(mainImageAdapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                MovieData movieData = imageAdapter.getItem(position);
+                VodData vodData = mainImageAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
-                intent.putExtra(Intent.EXTRA_TEXT, movieData);
+                intent.putExtra(Intent.EXTRA_TEXT, vodData);
                 startActivity(intent);
             }
         });
@@ -68,7 +62,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateData();
+//        updateData();;ljk
     }
 
     @Override
@@ -89,35 +83,19 @@ public class MainActivityFragment extends Fragment {
         fetchWeatherTask.execute();
     }
 
-    private class FetchDataTask extends AsyncTask<String, Void, MovieData[]> {
+    private class FetchDataTask extends AsyncTask<String, Void, VodData[]> {
 
         private final String LOG_TAG = this.getClass().getSimpleName();
 
-        final String BASE_URL = "http://api.themoviedb.org/3/";
-        final String APP_ID = "api_key";
-
         @Override
-        protected MovieData[] doInBackground(String... strings) {
+        protected VodData[] doInBackground(String... strings) {
 
-            MovieDbClient movieDbClient = new MovieDbClient();
+            MovieDbClient movieDbClient = new MovieDbClient(getActivity());
 
             String vodType = getFromPref(R.string.settings_vod_type_key, R.string.pref_default_vod_type);
             String confQueryType = getFromPref(R.string.settings_search_type_key, R.string.pref_default_search_type);
 
-            String data = movieDbClient.getDataFromServer(vodType, confQueryType);
-
-            MovieData[] movieDataArr = null;
-            try {
-                if (data != null){
-                    movieDataArr = DataParser.getDataFromJson(data);
-                }else{
-                    Log.e(LOG_TAG, "Cant get data from server!!!");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return movieDataArr;
+            return movieDbClient.getVodsByTypeAndQuery(vodType, confQueryType);
         }
 
 
@@ -128,11 +106,11 @@ public class MainActivityFragment extends Fragment {
             return prefs.getString(key, defaultValue);
         }
 
-        protected void onPostExecute(MovieData[] result) {
+        protected void onPostExecute(VodData[] result) {
             if (result != null){
-                imageAdapter.clear();
-                ArrayList<MovieData> all = new ArrayList<MovieData>(Arrays.asList(result));
-                imageAdapter.addAll(all);
+                mainImageAdapter.clear();
+                ArrayList<VodData> all = new ArrayList<VodData>(Arrays.asList(result));
+                mainImageAdapter.addAll(all);
             }
         }
     }

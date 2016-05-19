@@ -1,10 +1,12 @@
-package com.example.alon_ss.movies;
+package com.example.alon_ss.movies.settings;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import com.example.alon_ss.movies.R;
 
 /**
  * Created by alon_ss on 5/8/16.

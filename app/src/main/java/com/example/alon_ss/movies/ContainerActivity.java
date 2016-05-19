@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.alon_ss.movies.main.MainActivityFragment;
+
 /**
  * Created by alon_ss on 5/5/16.
  */
@@ -13,7 +15,7 @@ public class ContainerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.container_detail);
+        setContentView(R.layout.container_layout);
         if (savedInstanceState == null) {
             int id = R.id.container;
             Fragment fragment = new MainActivityFragment();
