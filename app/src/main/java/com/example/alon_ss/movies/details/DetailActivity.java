@@ -22,22 +22,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.alon_ss.movies.utills.MovieDbClient;
 import com.example.alon_ss.movies.R;
-import com.example.alon_ss.movies.settings.SettingsActivity;
 import com.example.alon_ss.movies.entities.TrailersData;
 import com.example.alon_ss.movies.entities.VodData;
+import com.example.alon_ss.movies.settings.SettingsActivity;
+import com.example.alon_ss.movies.utills.MovieDbClient;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -130,7 +131,6 @@ public class DetailActivity extends AppCompatActivity {
             ImageView detailImageView = (ImageView) mainView.findViewById(R.id.detail_image_view);
 
             VodData vodData = null;
-            ArrayList<TrailersData> videos = null;
 
             try {
                 vodData = fetchVodDataTask.get();
@@ -146,7 +146,10 @@ public class DetailActivity extends AppCompatActivity {
                 ratingTextView.setText(voteAverage);
                 String runtime = vodData.getRuntime() + "min";
                 runtimeTextView.setText(runtime);
+
+                // Enable the plot text to scroll
                 plotTextView.setText(vodData.getOverview());
+                plotTextView.setMovementMethod(new ScrollingMovementMethod());
 
                 String path = vodData.getPosterUrl(R.string.image_poster_size_small, getContext()).toString();
                 Picasso.with(getContext()).load(path).fit().centerInside().into(detailImageView);
@@ -159,6 +162,21 @@ public class DetailActivity extends AppCompatActivity {
             TextView emptyText = (TextView) mainView.findViewById(R.id.empty);
             emptyText.setText(getString(R.string.no_trailers_for_this_vod));
             listView.setEmptyView(emptyText);
+
+
+//            Button favoriteButton = (Button) mainView.findViewById(R.id.favorite_button);
+//
+//            favoriteButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.d(LOG_TAG, "getView [" + v + "]" + "Position: " + position);
+//
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    intent.setDataAndNormalize(getItem(position).getYouTubePath());
+//                    v.getContext().startActivity(intent);
+//
+//                }
+//            });
 
             return mainView;
         }
@@ -241,7 +259,7 @@ public class DetailActivity extends AppCompatActivity {
             protected void onPostExecute(ArrayList<TrailersData> result) {
                 if (result != null){
                     detailsTrailerAdapter.clear();
-                    ArrayList<TrailersData> all = new ArrayList<TrailersData>(result);
+                    ArrayList<TrailersData> all = new ArrayList<>(result);
                     detailsTrailerAdapter.addAll(all);
                 }
             }

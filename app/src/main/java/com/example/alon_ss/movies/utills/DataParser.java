@@ -1,5 +1,7 @@
 package com.example.alon_ss.movies.utills;
 
+import android.net.Uri;
+
 import com.example.alon_ss.movies.entities.TrailersData;
 import com.example.alon_ss.movies.entities.VodData;
 
@@ -69,7 +71,8 @@ public class DataParser {
                 String key = movieData.getString(KEY);
                 String name = movieData.getString(NAME);
 
-                vodVideos.add(new TrailersData(name, YOU_TUBE_URL + key));
+                Uri uri = Uri.parse(YOU_TUBE_URL + key);
+                vodVideos.add(new TrailersData(name, uri));
             }
         }
 

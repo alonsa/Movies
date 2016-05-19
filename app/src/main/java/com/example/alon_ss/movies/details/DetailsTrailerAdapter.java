@@ -1,6 +1,9 @@
 package com.example.alon_ss.movies.details;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.TypedArray;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,8 @@ import com.example.alon_ss.movies.R;
 import com.example.alon_ss.movies.entities.TrailersData;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by alon_ss on 5/9/16.
@@ -44,7 +49,7 @@ public class DetailsTrailerAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
 
         Log.d(LOG_TAG, "getView [position: " + position + ", convertView: " + convertView + "]");
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
@@ -54,17 +59,19 @@ public class DetailsTrailerAdapter extends BaseAdapter {
         if (trailersData != null){
 
             ImageView imageView = (ImageView) view.findViewById(R.id.youtube_icon);
-//            imageView.setImageURI();
-//            imageView.setClickable(true);
+
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(LOG_TAG, "getView [" + v + "]");
+                    Log.d(LOG_TAG, "getView [" + v + "]" + "Position: " + position);
 
-
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndNormalize(getItem(position).getYouTubePath());
+                    v.getContext().startActivity(intent);
 
                 }
             });
+
             TextView textView = (TextView) view.findViewById(R.id.trailer_text_view);
             textView.setText(trailersData.getName());
         }

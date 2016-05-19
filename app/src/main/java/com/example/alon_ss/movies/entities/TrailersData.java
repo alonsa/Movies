@@ -1,23 +1,25 @@
 package com.example.alon_ss.movies.entities;
 
+import android.net.Uri;
+
 /**
  * Created by alon_ss on 5/8/16.
  */
 public class TrailersData {
 
     private String name;
-    private String youTubePath;
+    private Uri youTubePath;
 
-    public TrailersData(String name, String key) {
+    public TrailersData(String name, Uri uri) {
         this.name = name;
-        this.youTubePath = key;
+        this.youTubePath = uri;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getYouTubePath() {
+    public Uri getYouTubePath() {
         return youTubePath;
     }
 }
