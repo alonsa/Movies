@@ -15,6 +15,7 @@
 
     <string name="pref_search_query_latest" translatable="false">latest</string>
     <string name="pref_search_query_popular" translatable="false">popular</string>
+    <string name="pref_search_query_my_favorite" translatable="false">My favorite</string>
     <string name="pref_search_query_top_rated" translatable="false">top_rated</string>
     <string name="pref_search_vod_query_now_playing_value" translatable="false">now_playing</string>
     <string name="pref_search_vod_query_upcoming_value" translatable="false">upcoming</string>
@@ -41,8 +42,15 @@
     <string name="detail_title_rating">IMDB rating</string>
     <string name="detail_title_release_date">Release date</string>
     <string name="mark_as_favorite">MARK AS FAVORITE</string>
+    <string name="remove_from_favorite">Remove from favorite</string>
     <string name="youtube_icon_size_small">youtube icon size small</string>
     <string name="trailers">Trailers:</string>
     <string name="no_trailers_for_this_vod">No trailers for this VOD…</string>
+
+
+    <!--favorites-->
+    <string name="favorites_movies">favorites</string>
+    <string name="favorites_tvs">favorites</string>
+
 
 </resources>

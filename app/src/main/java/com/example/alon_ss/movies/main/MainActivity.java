@@ -72,14 +72,15 @@ public class MainActivity extends AppCompatActivity {
         Set<String> vodQueryTypes = new HashSet<>(Arrays.asList(
                 getString(R.string.pref_search_query_latest),
                 getString(R.string.pref_search_query_popular),
+                getString(R.string.pref_search_query_my_favorite),
                 getString(R.string.pref_search_query_top_rated),
                 getString(R.string.pref_search_vod_query_upcoming_value),
                 getString(R.string.pref_search_vod_query_now_playing_value)));
 
-
         Set<String> tvQueryTypes = new HashSet<>(Arrays.asList(
                 getString(R.string.pref_search_query_latest),
                 getString(R.string.pref_search_query_popular),
+                getString(R.string.pref_search_query_my_favorite),
                 getString(R.string.pref_search_query_top_rated),
                 getString(R.string.pref_search_tv_query_airing_today_value),
                 getString(R.string.pref_search_tv_query_on_the_air_value)));

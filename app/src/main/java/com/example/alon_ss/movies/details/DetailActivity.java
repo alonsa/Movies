@@ -17,10 +17,14 @@
 package com.example.alon_ss.movies.details;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -153,6 +157,30 @@ public class DetailActivity extends AppCompatActivity {
 
                 String path = vodData.getPosterUrl(R.string.image_poster_size_small, getContext()).toString();
                 Picasso.with(getContext()).load(path).fit().centerInside().into(detailImageView);
+
+                Button favoriteButton = (Button) mainView.findViewById(R.id.favorite_button);
+                favoriteButton.setClickable(true);
+                favoriteButton.setTag(vodData.getId());
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                buttonLogic(vodData.getId(), favoriteButton, prefs.contains(vodData.getId()));
+
+                favoriteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String vodId = (String) v.getTag();
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                        SharedPreferences.Editor prefsEdit = prefs.edit();
+                        buttonLogic(vodId, (Button) v, prefs.contains(vodId));
+
+                        if (prefs.contains(vodId)){
+                            prefsEdit.remove(vodId);
+                        }else {
+                            prefsEdit.putBoolean(vodId, true);
+                        }
+                        prefsEdit.apply();
+                    }
+                });
             }else {
                 Log.w(LOG_TAG, "We don't have a vodData to use");
             }
@@ -163,53 +191,22 @@ public class DetailActivity extends AppCompatActivity {
             emptyText.setText(getString(R.string.no_trailers_for_this_vod));
             listView.setEmptyView(emptyText);
 
-
-//            Button favoriteButton = (Button) mainView.findViewById(R.id.favorite_button);
-//
-//            favoriteButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d(LOG_TAG, "getView [" + v + "]" + "Position: " + position);
-//
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setDataAndNormalize(getItem(position).getYouTubePath());
-//                    v.getContext().startActivity(intent);
-//
-//                }
-//            });
-
             return mainView;
         }
 
-//        @Override
-//        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//            // Inflate the menu; this adds items to the action bar if it is present.
-//            // inflater.inflate(R.menu.detailfragment, menu);
-//            // Retrieve the share menu item
-//            MenuItem menuItem = menu.findItem(R.id.action_share);
-//
-//            // Get the provider and hold onto it to set/change the share intent.
-//            ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-//
-//            // Attach an intent to this ShareActionProvider.  You can update this at any time,
-//            // like when the user selects a new piece of data they might like to share.
-//
-//            if (mShareActionProvider != null ) {
-//            mShareActionProvider.setShareIntent(createShareForecastIntent());
-//            } else {
-//                Log.d(LOG_TAG, "Share Action Provider is null?");
-//            }
-//        }
+        private void buttonLogic(String vodId, Button favoriteButton, Boolean isClicked) {
+            if (isClicked){
+                int color = ContextCompat.getColor(getContext(), R.color.blueviolet);
+                favoriteButton.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                favoriteButton.setText(getContext().getString(R.string.remove_from_favorite));
 
-//        public Intent createShareForecastIntent() {
-//
-//            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-//            shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-//            shareIntent.setType("text/plain");
-//            shareIntent.putExtra(Intent.EXTRA_TEXT, mForecastStr + FORECAST_SHARE_HASHTAG);
-//            return shareIntent;
-//
-//        }
+            }else {
+                favoriteButton.getBackground().clearColorFilter();
+                favoriteButton.setText(getContext().getString(R.string.mark_as_favorite));
+
+            }
+            favoriteButton.invalidate();
+        }
 
         private class FetchVodDataTask extends AsyncTask<String, Void, VodData> {
 
