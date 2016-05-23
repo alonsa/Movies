@@ -56,17 +56,15 @@ public class MainImageAdapter extends BaseAdapter {
 
         if (vodData != null){
             ImageView imageView = (ImageView) view.findViewById(R.id.movie_image_view);
-            imageView.setAlpha(0.15f);
+//            imageView.setAlpha(0.15f);
             String path = vodData.getPosterUrl(R.string.image_poster_size_small, context).toString();
             Picasso.with(context).load(path).fit().centerInside().into(imageView);
 
-            TextView textView = (TextView) view.findViewById(R.id.movie_text_view);
-            textView.bringToFront();
-            textView.setBackgroundColor(Color.WHITE);
-            textView.setText(vodData.getTitle());
+//            TextView textView = (TextView) view.findViewById(R.id.movie_text_view);
+////            textView.bringToFront();
+//            textView.setBackgroundColor(Color.BLUE);
+//            textView.setText(vodData.getTitle());
         }
-
-
         return view;
     }
 

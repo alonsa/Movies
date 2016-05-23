@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.alon_ss.movies.R;
+import com.google.gson.Gson;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,6 +28,9 @@ public class VodData implements Parcelable {
     private String vodType = "";
     private Integer runtime;
 
+    private Gson gson = new Gson();
+
+
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
 
@@ -39,6 +43,19 @@ public class VodData implements Parcelable {
         this.voteAverage = voteAverage;
         this.vodType = vodType;
         this.runtime = runtime;
+    }
+
+    public VodData(String json) {
+        SimpleVodData simpleVodData = gson.fromJson(json, SimpleVodData.class);
+
+        this.posterRawPath = simpleVodData.getPosterRawPath();
+        this.overview = simpleVodData.getOverview();
+        this.releaseDate = simpleVodData.getReleaseDate();
+        this.id = simpleVodData.getId();
+        this.title = simpleVodData.getTitle();
+        this.voteAverage = simpleVodData.getVoteAverage();
+        this.vodType = simpleVodData.getVodType();
+        this.runtime = simpleVodData.getRuntime();
     }
 
     public VodData(Parcel parcel){
@@ -139,4 +156,7 @@ public class VodData implements Parcelable {
         }
     };
 
+    public String toJsonString() {
+        return gson.toJson(new SimpleVodData(this));
+    }
 }

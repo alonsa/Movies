@@ -17,14 +17,15 @@
     <string name="pref_search_query_popular" translatable="false">popular</string>
     <string name="pref_search_query_my_favorite" translatable="false">My favorite</string>
     <string name="pref_search_query_top_rated" translatable="false">top_rated</string>
-    <string name="pref_search_vod_query_now_playing_value" translatable="false">now_playing</string>
-    <string name="pref_search_vod_query_upcoming_value" translatable="false">upcoming</string>
-    <string name="pref_search_vod_query_now_playing_display" translatable="false">Now playing (VOD only)</string>
-    <string name="pref_search_vod_query_upcoming_display" translatable="false">Upcoming (VOD only)</string>
+    <string name="pref_search_query_favorites">Favorites</string>
+    <string name="pref_search_movie_query_now_playing_value" translatable="false">now_playing</string>
+    <string name="pref_search_movie_query_upcoming_value" translatable="false">upcoming</string>
+    <string name="pref_search_movie_query_now_playing_display" translatable="false">Now playing (MOVIEs only)</string>
+    <string name="pref_search_movie_query_upcoming_display" translatable="false">Upcoming (MOVIEs only)</string>
     <string name="pref_search_tv_query_airing_today_value" translatable="false">airing_today</string>
-    <string name="pref_search_tv_query_airing_today_display" translatable="false">Airing today (TV only)</string>
+    <string name="pref_search_tv_query_airing_today_display" translatable="false">Airing today (TVs only)</string>
     <string name="pref_search_tv_query_on_the_air_value" translatable="false">on_the_air</string>
-    <string name="pref_search_tv_query_on_the_air_display" translatable="false">On the air (TV only)</string>
+    <string name="pref_search_tv_query_on_the_air_display" translatable="false">On the air (TVs only)</string>
 
     <string name="settings_vod_type_label">Vod type</string>
     <string name="settings_vod_type_key">Select vod type</string>
@@ -49,8 +50,8 @@
 
 
     <!--favorites-->
-    <string name="favorites_movies">favorites</string>
-    <string name="favorites_tvs">favorites</string>
+    <string name="favorites_movies">favorites movies</string>
+    <string name="favorites_tvs">favorites tv shows</string>
 
 
 </resources>

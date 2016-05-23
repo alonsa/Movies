@@ -15,19 +15,20 @@
         <item>@string/pref_search_query_popular</item>
         <item>@string/pref_search_query_latest</item>
         <item>@string/pref_search_query_top_rated</item>
-        <item>@string/pref_search_vod_query_upcoming_value</item>
-        <item>@string/pref_search_vod_query_now_playing_value</item>
+        <item>@string/pref_search_query_favorites</item>
+        <item>@string/pref_search_movie_query_upcoming_value</item>
+        <item>@string/pref_search_movie_query_now_playing_value</item>
         <item>@string/pref_search_tv_query_airing_today_value</item>
         <item>@string/pref_search_tv_query_on_the_air_value</item>
 
     </string-array>
     <string-array name="pref_search_options">
         <item>@string/pref_search_query_popular</item>
-        <item>@string/pref_search_query_my_favorite</item>
         <item>@string/pref_search_query_latest</item>
         <item>@string/pref_search_query_top_rated</item>
-        <item>@string/pref_search_vod_query_upcoming_display</item>
-        <item>@string/pref_search_vod_query_now_playing_display</item>
+        <item>@string/pref_search_query_favorites</item>
+        <item>@string/pref_search_movie_query_upcoming_display</item>
+        <item>@string/pref_search_movie_query_now_playing_display</item>
         <item>@string/pref_search_tv_query_airing_today_display</item>
         <item>@string/pref_search_tv_query_on_the_air_display</item>
     </string-array>

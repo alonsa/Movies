@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.example.alon_ss.movies.R;
 import com.example.alon_ss.movies.settings.SettingsActivity;
+import com.example.alon_ss.movies.utills.Utills;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -69,29 +70,36 @@ public class MainActivity extends AppCompatActivity {
 
     private String getQueryTypeByVodAndConfQueryType(String vodType, String queryType) {
 
-        Set<String> vodQueryTypes = new HashSet<>(Arrays.asList(
-                getString(R.string.pref_search_query_latest),
-                getString(R.string.pref_search_query_popular),
-                getString(R.string.pref_search_query_my_favorite),
-                getString(R.string.pref_search_query_top_rated),
-                getString(R.string.pref_search_vod_query_upcoming_value),
-                getString(R.string.pref_search_vod_query_now_playing_value)));
+        return Utills.getQueryTypeByVodAndConfQueryType(vodType, queryType, getApplicationContext());
 
-        Set<String> tvQueryTypes = new HashSet<>(Arrays.asList(
-                getString(R.string.pref_search_query_latest),
-                getString(R.string.pref_search_query_popular),
-                getString(R.string.pref_search_query_my_favorite),
-                getString(R.string.pref_search_query_top_rated),
-                getString(R.string.pref_search_tv_query_airing_today_value),
-                getString(R.string.pref_search_tv_query_on_the_air_value)));
 
-        if (!((isMovie(vodType) && vodQueryTypes.contains(queryType)) ||
-                (!isMovie(vodType) && tvQueryTypes.contains(queryType)))){
-
-            return getString(R.string.pref_search_query_popular);
-        }else {
-            return queryType;
-        }
+//        Set<String> commonQueryTypes = new HashSet<>(Arrays.asList(
+//                getString(R.string.pref_search_query_latest),
+//                getString(R.string.pref_search_query_popular),
+//                getString(R.string.pref_search_query_my_favorite),
+//                getString(R.string.pref_search_query_top_rated),
+//                getString(R.string.pref_search_query_favorites)
+//                ));
+//
+//        Set<String> movieQueryTypes = new HashSet<>(Arrays.asList(
+//                getString(R.string.pref_search_movie_query_upcoming_value),
+//                getString(R.string.pref_search_movie_query_now_playing_value)));
+//
+//        movieQueryTypes.addAll(commonQueryTypes);
+//
+//        Set<String> tvQueryTypes = new HashSet<>(Arrays.asList(
+//                getString(R.string.pref_search_tv_query_airing_today_value),
+//                getString(R.string.pref_search_tv_query_on_the_air_value)));
+//
+//        tvQueryTypes.addAll(commonQueryTypes);
+//
+//        if (!((isMovie(vodType) && movieQueryTypes.contains(queryType)) ||
+//                (!isMovie(vodType) && tvQueryTypes.contains(queryType)))){
+//
+//            return getString(R.string.pref_search_query_popular);
+//        }else {
+//            return queryType;
+//        }
     }
 
     @Override

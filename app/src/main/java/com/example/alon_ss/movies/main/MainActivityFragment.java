@@ -21,6 +21,9 @@ import com.example.alon_ss.movies.details.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -62,7 +65,6 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        updateData();;ljk
     }
 
     @Override
@@ -95,9 +97,33 @@ public class MainActivityFragment extends Fragment {
             String vodType = getFromPref(R.string.settings_vod_type_key, R.string.pref_default_vod_type);
             String confQueryType = getFromPref(R.string.settings_search_type_key, R.string.pref_default_search_type);
 
-            return movieDbClient.getVodsByTypeAndQuery(vodType, confQueryType);
+            if (confQueryType.equals(getString(R.string.pref_search_query_favorites))){
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String favoriteListName = getFavoriteListName(vodType);
+                Set<String> favoriteVods = prefs.getStringSet(favoriteListName, new HashSet<String>());
+
+                List<VodData> vodList = new ArrayList<>();
+
+
+                for (String jsonString: favoriteVods){
+                    vodList.add(new VodData(jsonString));
+                }
+                VodData[] vodArray = vodList.toArray(new VodData[vodList.size()]);
+
+                return vodArray;
+            }else{
+                return movieDbClient.getVodsByTypeAndQuery(vodType, confQueryType);
+            }
+
         }
 
+        private String getFavoriteListName(String vodType) {
+            if (vodType.equals(getString(R.string.pref_vod_type_movie))){
+                return getString(R.string.favorites_movies);
+            }else{
+                return getString(R.string.favorites_tvs);
+            }
+        }
 
         private String getFromPref(int name, int defaultVal) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());

@@ -39,13 +39,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.alon_ss.movies.R;
+import com.example.alon_ss.movies.entities.SimpleVodData;
 import com.example.alon_ss.movies.entities.TrailersData;
 import com.example.alon_ss.movies.entities.VodData;
 import com.example.alon_ss.movies.settings.SettingsActivity;
 import com.example.alon_ss.movies.utills.MovieDbClient;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 public class DetailActivity extends AppCompatActivity {
@@ -88,6 +92,8 @@ public class DetailActivity extends AppCompatActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class DetailFragment extends Fragment {
+
+        Gson gson = new Gson();
 
         FetchVodDataTask fetchVodDataTask = new FetchVodDataTask();
         FetchTrailersDataTask fetchTrailersDataTask = new FetchTrailersDataTask();
@@ -148,8 +154,11 @@ public class DetailActivity extends AppCompatActivity {
                 releaseDateTextView.setText(vodData.getReleaseDateString());
                 String voteAverage = String.valueOf(vodData.getVoteAverage()) + "/" + 10;
                 ratingTextView.setText(voteAverage);
-                String runtime = vodData.getRuntime() + "min";
-                runtimeTextView.setText(runtime);
+
+                if (vodData.getRuntime()  != null){
+                    String runtime = vodData.getRuntime() + " min";
+                    runtimeTextView.setText(runtime);
+                }
 
                 // Enable the plot text to scroll
                 plotTextView.setText(vodData.getOverview());
@@ -160,27 +169,37 @@ public class DetailActivity extends AppCompatActivity {
 
                 Button favoriteButton = (Button) mainView.findViewById(R.id.favorite_button);
                 favoriteButton.setClickable(true);
-                favoriteButton.setTag(vodData.getId());
+                favoriteButton.setTag(vodData);
+
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                buttonLogic(vodData.getId(), favoriteButton, prefs.contains(vodData.getId()));
+                String favoriteListName = getFavoriteListName(vodData.getVodType());
+                Set<String> favoriteVods = prefs.getStringSet(favoriteListName, new HashSet<String>());
+                buttonLogic(favoriteButton, favoriteVods.contains(vodData.toJsonString()));
 
                 favoriteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        String vodId = (String) v.getTag();
+                        VodData vodData = (VodData) v.getTag();
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                        SharedPreferences.Editor prefsEdit = prefs.edit();
-                        buttonLogic(vodId, (Button) v, prefs.contains(vodId));
+                        String favoriteListName = getFavoriteListName(vodData.getVodType());
+                        Set<String> favoriteVods = prefs.getStringSet(favoriteListName, new HashSet<String>());
 
-                        if (prefs.contains(vodId)){
-                            prefsEdit.remove(vodId);
+
+                        if (favoriteVods.contains(vodData.toJsonString())){
+                            favoriteVods.remove(vodData.toJsonString());
                         }else {
-                            prefsEdit.putBoolean(vodId, true);
+                            favoriteVods.add(vodData.toJsonString());
                         }
+
+                        buttonLogic((Button) v, favoriteVods.contains(vodData.getId()));
+
+                        SharedPreferences.Editor prefsEdit = prefs.edit();
+                        prefsEdit.putStringSet(favoriteListName, favoriteVods);
                         prefsEdit.apply();
                     }
                 });
+
             }else {
                 Log.w(LOG_TAG, "We don't have a vodData to use");
             }
@@ -194,7 +213,15 @@ public class DetailActivity extends AppCompatActivity {
             return mainView;
         }
 
-        private void buttonLogic(String vodId, Button favoriteButton, Boolean isClicked) {
+        private String getFavoriteListName(String vodType) {
+            if (vodType.equals(getString(R.string.pref_vod_type_movie))){
+                return getString(R.string.favorites_movies);
+            }else{
+                return getString(R.string.favorites_tvs);
+            }
+        }
+
+        private void buttonLogic(Button favoriteButton, Boolean isClicked) {
             if (isClicked){
                 int color = ContextCompat.getColor(getContext(), R.color.blueviolet);
                 favoriteButton.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
