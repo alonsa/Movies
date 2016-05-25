@@ -2,6 +2,7 @@ package com.example.alon_ss.movies.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -46,6 +47,13 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_fragment, container, false);
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
+
+        if (getResources().getDisplayMetrics().widthPixels > getResources().getDisplayMetrics().heightPixels) {
+            gridview.setNumColumns(getResources().getInteger(R.integer.main_fragment_gridview_numColumns_horizontal));
+        } else {
+            gridview.setNumColumns(getResources().getInteger(R.integer.main_fragment_gridview_numColumns_vertical));
+        }
+
         gridview.setAdapter(mainImageAdapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

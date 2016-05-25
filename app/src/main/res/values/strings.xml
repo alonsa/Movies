@@ -48,6 +48,9 @@
     <string name="trailers">Trailers:</string>
     <string name="no_trailers_for_this_vod">No trailers for this VOD…</string>
 
+    <integer name="main_fragment_gridview_numColumns_horizontal">3</integer>
+    <integer name="main_fragment_gridview_numColumns_vertical">2</integer>
+
 
     <!--favorites-->
     <string name="favorites_movies">favorites movies</string>
